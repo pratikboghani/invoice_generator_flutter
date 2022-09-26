@@ -20,25 +20,23 @@ class _LoadinScreenState extends State<LoadinScreen> {
   @override
   void initState() {
     timer();
-    fetchdata();
+    // fetchdata();
 
     super.initState();
   }
 
-  Future fetchdata() async {
-    final String strData = await rootBundle.loadString("assets/data.json");
-    final List<dynamic> json = jsonDecode(strData);
-    final List<String> jsonStrData = json.cast<String>();
-    // setState(() {
-    //   autoComplateData = jsonStrData;
-    // });
-  }
+  // Future fetchdata() async {
+  //   final String strData = await rootBundle.loadString("assets/data.dart");
+  //   final List<dynamic> json = jsonDecode(strData);
+  //   jsonStrData = json.cast<String>();
+  //   // setState(() {
+  //   //   autoComplateData = jsonStrData;
+  //   // });
+  // }
 
   void timer() async {
     try {
-      await Future.delayed(const Duration(seconds: 2), () {
-        print('22222');
-      });
+      await Future.delayed(const Duration(seconds: 2), () {});
 
       Navigator.pushReplacementNamed(
           context,
@@ -60,12 +58,9 @@ class _LoadinScreenState extends State<LoadinScreen> {
               color: xAppBarColor,
               size: 30,
             ),
-            Hero(
-              tag: 'excel',
-              child: Text(
-                'EXCEL INFOSYS',
-                style: TextStyle(color: xAppBarColor, fontSize: 30),
-              ),
+            Text(
+              'EXCEL INFOSYS',
+              style: TextStyle(color: xAppBarColor, fontSize: 30),
             ),
           ],
         ),

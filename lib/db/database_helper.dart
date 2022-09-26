@@ -32,6 +32,19 @@ class DatabaseHelper {
     ${Item.iname} TEXT NOT NULL
     )
     ''');
+    await db.insert(
+        Item.tblname, Item(iName: '2.MP 4B08 8 CH DAHUVA DVR').toMap());
+    await db.insert(
+        Item.tblname, Item(iName: '2.MP 4A08 8 CH DAHUVA DVR').toMap());
+    await db.insert(Item.tblname, Item(iName: '2 TB WD HDD').toMap());
+    await db.insert(Item.tblname, Item(iName: '1 TB WD HDD').toMap());
+    await db.insert(Item.tblname, Item(iName: '4 TB WD & TOSHIBA HDD').toMap());
+    await db.insert(Item.tblname, Item(iName: '8 CH POWER SUPPLY').toMap());
+    await db.insert(Item.tblname, Item(iName: '4 CH POWER SUPPLY').toMap());
+    await db.insert(Item.tblname, Item(iName: '16 CH POWER SUPPLY').toMap());
+    await db.insert(Item.tblname, Item(iName: 'BNC+DC PIN').toMap());
+    await db.insert(Item.tblname, Item(iName: 'SOLID 3+1 CABLE/MTR').toMap());
+    await db.insert(Item.tblname, Item(iName: 'IMSTALLATION CHARGE').toMap());
     await db.execute('''
     CREATE TABLE ${InvoiceData.tblname}(
     ${InvoiceData.year} TEXT NOT NULL,

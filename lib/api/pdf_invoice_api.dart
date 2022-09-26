@@ -28,7 +28,7 @@ class PdfInvoiceApi {
       footer: (context) => buildFooter(invoice),
     ));
 
-    return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: 'Estimate.pdf', pdf: pdf);
   }
 
   static Widget buildHeader(Invoice invoice) => Column(
@@ -39,14 +39,16 @@ class PdfInvoiceApi {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildOwnerDetail(invoice.supplier),
-
-              // Container(
-              //   height: 50, width: 50,
-              //   //   child: BarcodeWidget(
-              //   //     barcode: Barcode.qrCode(),
-              //   //     data: invoice.info.number,
-              //   //   ),
-              // ),
+              Container(
+                height: 50,
+                width: 50,
+                child: pw.Image(image),
+                // color: xHeaderColor,
+                // child: BarcodeWidget(
+                //   barcode: Barcode.qrCode(),
+                //   data: invoice.info.number,
+                // ),
+              ),
             ],
           ),
           //SizedBox(height: 1 * PdfPageFormat.cm),
@@ -272,9 +274,9 @@ class PdfInvoiceApi {
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: '', value: invoice.supplier.owner),
+          //buildSimpleText(title: '', value: invoice.supplier.owner),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          buildSimpleText(title: '', value: invoice.supplier.mobNo),
+          //buildSimpleText(title: '', value: invoice.supplier.mobNo),
         ],
       );
 

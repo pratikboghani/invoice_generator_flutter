@@ -18,6 +18,8 @@ dependencies:
   number_to_words: ^1.0.0
   substring_highlight: ^1.0.33
   sqflite: ^2.0.3+1
+  flutter_material_color_picker: ^1.1.0+2
+  animate_icons: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,8 +27,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-#    - images/logo.jpg
-    - assets/data.json
+    - images/logo.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

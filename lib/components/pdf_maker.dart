@@ -32,7 +32,7 @@ void generatePDF(
           date: date,
           //dueDate: dueDate,
           //description: '',
-          number: '${DateTime.now().year}-$invNumber'), //Estimate number
+          number: '$invNumber'), //Estimate number
       items: itemlist));
   PdfApi.openFile(pdfFile);
 }

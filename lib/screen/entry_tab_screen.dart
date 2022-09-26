@@ -1,3 +1,4 @@
+import 'package:animate_icons/animate_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:invoice_generator/components/utils.dart';
 import 'package:invoice_generator/model/note.dart';
@@ -12,7 +13,8 @@ class EntryTab extends StatefulWidget {
   State<EntryTab> createState() => _EntryTabState();
 }
 
-class _EntryTabState extends State<EntryTab> {
+class _EntryTabState extends State<EntryTab>
+    with SingleTickerProviderStateMixin {
   late DatabaseHelper dbHelper;
 
   late var itemNameController = TextEditingController();
@@ -20,6 +22,7 @@ class _EntryTabState extends State<EntryTab> {
   final itemQuantityController = TextEditingController();
   final CustomerNameController = TextEditingController();
   final CustomerAddressController = TextEditingController();
+  late AnimateIconController _animationController;
   List<String> iname = [];
   List<String> iprice = [];
   List<String> iquantity = [];
@@ -60,18 +63,16 @@ class _EntryTabState extends State<EntryTab> {
     for (var i in x) {
       invYear = int.parse(i.iYear);
       invNumber = int.parse(i.iNumber);
-      print('inv year::::::::::::::::: $invYear');
     }
   }
 
   _updateInvData() async {
     await _getInvData();
-    // if (int.parse(invYear) < int.parse(DateTime.now().year.toString())) {
-    //   invNumber = 1;
-    // } else {
-    //   invNumber = invNumber + 1;
-    // }
-
+    if (invYear < DateTime.now().year) {
+      invNumber = 1;
+    } else {
+      invNumber = invNumber + 1;
+    }
     await dbHelper.updateInvoice(InvoiceData(
         iNumber: invNumber.toString(), iYear: DateTime.now().year.toString()));
   }
@@ -81,9 +82,37 @@ class _EntryTabState extends State<EntryTab> {
     setState(() {
       dbHelper = DatabaseHelper.instance;
       _getInvData();
+      _animationController = AnimateIconController();
       //_updateInvData();
     });
     super.initState();
+  }
+
+  // bool isAnimating = false;
+  //
+  // void changeIcon() {
+  //   setState(() {
+  //     isAnimating = !isAnimating;
+  //
+  //     isAnimating
+  //         ? _animationController.forward()
+  //         : _animationController.reverse();
+  //   });
+  // }
+  bool onAddIconPress(BuildContext context) {
+    if (itemNameController.text.isEmpty ||
+        itemQuantityController.text.isEmpty ||
+        itemPriceController.text.isEmpty) {
+      final snackBar = SnackBar(
+        content: Text('Enter Valid Inputs'),
+        duration: Duration(milliseconds: 500),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      addToList();
+    }
+    clearController();
+    return true;
   }
 
   void showPopUp() {
@@ -103,7 +132,7 @@ class _EntryTabState extends State<EntryTab> {
           decoration: BoxDecoration(
               borderRadius:
                   new BorderRadius.vertical(top: const Radius.circular(35.0)),
-              color: xCardBackgroundColor),
+              color: xAppBarTextColor),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
@@ -123,7 +152,6 @@ class _EntryTabState extends State<EntryTab> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: FloatingActionButton(
-                        heroTag: 'go',
                         backgroundColor: xAppBarColor,
                         onPressed: () async {
                           //addCards();
@@ -169,9 +197,6 @@ class _EntryTabState extends State<EntryTab> {
           Autocomplete(
             onSelected: (String Selection) {
               //itemNameList.insert(cards.length - 1, Selection);
-
-              print('---------------------------');
-              print(Selection);
             },
             optionsBuilder: (tev) {
               if (tev.text.isEmpty) {
@@ -233,7 +258,6 @@ class _EntryTabState extends State<EntryTab> {
                   ),
                 ),
                 FloatingActionButton(
-                  heroTag: 'go',
                   backgroundColor: xAppBarColor,
                   onPressed: () {
                     //addCards();
@@ -256,19 +280,17 @@ class _EntryTabState extends State<EntryTab> {
                   backgroundColor: xAppBarColor,
                   onPressed: () {
                     //addCards();
-                    if (itemNameController.text.isEmpty ||
-                        itemQuantityController.text.isEmpty ||
-                        itemPriceController.text.isEmpty) {
-                      final snackBar = SnackBar(
-                        content: Text('Enter Valid Inputs'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    } else {
-                      addToList();
-                    }
-                    clearController();
                   },
-                  child: Icon(Icons.add),
+                  child: AnimateIcons(
+                    duration: Duration(milliseconds: 500),
+                    startIconColor: xAppBarTextColor,
+                    endIconColor: xAppBarTextColor,
+                    startIcon: Icons.add,
+                    endIcon: Icons.add,
+                    controller: _animationController,
+                    onEndIconPress: () => onAddIconPress(context),
+                    onStartIconPress: () => onAddIconPress(context),
+                  ),
                 ),
               ],
             ),
@@ -280,41 +302,37 @@ class _EntryTabState extends State<EntryTab> {
               physics: AlwaysScrollableScrollPhysics(),
               itemCount: iname.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                      //elevation: 2,
+                return ListTile(
+                  //elevation: 2,
 
-                      title: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(iname[index]),
-                      ),
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(iname[index]),
+                  ),
 
-                      onTap: () {
+                  onTap: () {
+                    setState(() {
+                      //print(iname[index].toString());
+                      // itemController.text = itemList[index].iName;
+                      //dbHelper.delete(itemList[index].iName);
+                      //_refreshItems();
+                    });
+                  },
+
+                  trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
                         setState(() {
-                          //print(iname[index].toString());
-                          // itemController.text = itemList[index].iName;
-                          //dbHelper.delete(itemList[index].iName);
-                          //_refreshItems();
+                          // dbHelper.delete(itemList[index].iName);
+                          // _refreshItems();
+                          deleteitem(index);
                         });
-                      },
-
-                      trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              // dbHelper.delete(itemList[index].iName);
-                              // _refreshItems();
-                              deleteitem(index);
-                            });
-                          }),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                            '${iquantity[index]} * ₹${iprice[index]} = ₹${int.parse(iquantity[index]) * int.parse(iprice[index])}'),
-                      ),
-                    ),
-                  ],
+                      }),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                        '${iquantity[index]} * ₹${iprice[index]} = ₹${int.parse(iquantity[index]) * int.parse(iprice[index])}'),
+                  ),
                 );
               },
             ),
@@ -336,6 +354,7 @@ class _EntryTabState extends State<EntryTab> {
 
   @override
   void dispose() {
+    // _animationController.dispose();
     super.dispose();
   }
 }

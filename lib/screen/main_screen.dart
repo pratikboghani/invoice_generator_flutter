@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:invoice_generator/components/constant.dart';
 import 'package:invoice_generator/screen/entry_tab_screen.dart';
 
@@ -12,6 +13,8 @@ class MainTabScr extends StatefulWidget {
 }
 
 class _MainTabScrState extends State<MainTabScr> {
+  void changeColor(Color color) {}
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -23,20 +26,21 @@ class _MainTabScrState extends State<MainTabScr> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: xAppBarColor,
-            title: Hero(tag: 'excel', child: Text('EXCEL INFOSYS')),
+            title: Text('EXCEL INFOSYS'),
             bottom: TabBar(
+              indicatorColor: xAppBarColor,
               tabs: [
                 Tab(
-                  text: 'Items',
+                  text: 'Entry',
                 ),
-                Tab(text: 'Entry')
+                Tab(text: 'Items')
               ],
             ),
           ),
           body: TabBarView(
             children: [
-              ItemTab(),
               EntryTab(),
+              ItemTab(),
             ],
           ),
           drawer: Drawer(
@@ -57,9 +61,33 @@ class _MainTabScrState extends State<MainTabScr> {
                   ),
                 ),
                 ListTile(
-                  onTap: () {},
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Theme'),
+                            content: SingleChildScrollView(
+                              child: MaterialColorPicker(
+                                  selectedColor: xAppBarColor,
+                                  onColorChange: (Color color) {
+                                    setState(() => xAppBarColor = color);
+                                  }),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'OK',
+                                  ))
+                            ],
+                          );
+                        });
+                  },
+                  leading: Icon(Icons.color_lens_rounded),
+                  title: Text('Theme'),
                 ),
                 ListTile(
                   onTap: () {},
